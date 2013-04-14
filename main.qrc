@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="go-up.png">go-up.png</file>
+        <file alias="search.png">search.png</file>
+    </qresource>
+</RCC>
