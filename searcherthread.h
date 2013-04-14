@@ -9,9 +9,14 @@ class Search;
 
 class SearcherThread : public QThread
 {
+    Q_OBJECT
+    //Q_THREAD
+
+private:
     Search *search;
 public:
     SearcherThread(Search *s);
+    virtual ~SearcherThread();
     void run();
 private:
     QString loc;

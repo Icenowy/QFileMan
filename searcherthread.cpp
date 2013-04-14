@@ -13,6 +13,11 @@ SearcherThread::SearcherThread(Search *s)
     connect(this,SIGNAL(AddStringItem(QString)),search,SLOT(AddStringItem(QString)));
 }
 
+SearcherThread::~SearcherThread()
+{
+
+}
+
 void SearcherThread::run()
 {
     QFileInfo root = QFileInfo(search->getRootdir() + loc);
@@ -23,7 +28,8 @@ void SearcherThread::run()
         mb->show();
         exit();
     }
-    QDir *dir = new QDir(root.canonicalFilePath());
+    QString str = root.canonicalFilePath();
+    QDir *dir = new QDir(str);
     this->RescFind(dir);
     search->Done();
 }
@@ -53,15 +59,15 @@ void SearcherThread::setContent(QString c)
 void SearcherThread::RescFind(QDir *dir)
 {
     QRegExp *reg = new QRegExp(cont);
-    QFileInfoList fis = dir->entryInfoList(QDir::NoDotAndDotDot);
+    QFileInfoList fis = dir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
     QFileInfo fi;
     foreach(fi,fis)
     {
 #ifndef NDEBUG
         {
-            QString debuginfo = (QString() + "Debug: Finding " + fi.canonicalFilePath());
+            QString debuginfo = (QString() + "Debug: Finding " + fi.canonicalFilePath() + " ");
             AddStringItem(debuginfo);
-#ifdef WIN32
+#ifdef Q_OS_WIN32
             {
                 wchar_t *wc;
                 wc = new wchar_t[debuginfo.length()+1];
@@ -73,7 +79,7 @@ void SearcherThread::RescFind(QDir *dir)
 #else
         AddStringItem("");
 #endif
-        if(reg->exactMatch(fi.completeBaseName()+ "." + fi.completeSuffix()))
+        if(reg->indexIn(fi.fileName()))
         {
             AddFileItem(fi);
         }
@@ -82,14 +88,4 @@ void SearcherThread::RescFind(QDir *dir)
             RescFind(new QDir(fi.canonicalFilePath()));
         }
     }
-}
-
-void SearcherThread::AddStringItem(QString str)
-{
-
-}
-
-void SearcherThread::AddFileItem(QFileInfo file)
-{
-
 }

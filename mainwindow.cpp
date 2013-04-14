@@ -32,8 +32,10 @@ MainWindow::MainWindow(QString rootdir, QWidget *parent) :
     this->setWindowTitle(rootdir);
     ui->lcdNumber->setVisible(false);
     ui->centralwidget->setVisible(false);
-#ifdef WIN32
+#ifdef Q_OS_WIN32
     settings = new QSettings("HKEY_CURRENT_USER\\Software\\EasternHeart\\QFileMan",QSettings::NativeFormat);
+#elif defined(Q_OS_LINUX)
+    settings = new QSettings("EasternHeart","QFileMan",this);
 #else
 #error QSettings port!!!
 #endif

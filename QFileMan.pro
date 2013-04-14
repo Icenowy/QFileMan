@@ -34,4 +34,4 @@ OTHER_FILES += \
 RESOURCES += \
     main.qrc
 
-unix|win32: LIBS += -lglib-2.0
+unix|win32: LIBS += -lwv -lglib-2.0
