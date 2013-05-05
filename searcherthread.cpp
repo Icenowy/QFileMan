@@ -24,7 +24,7 @@ void SearcherThread::run()
     //search->AddFileItem(root);
     if(!root.isDir())
     {
-        QMessageBox *mb = new QMessageBox(QMessageBox::Critical,"ÑÏÖØ´íÎó","Ñ¡ÔñµÄÎ»ÖÃ²»ÊÇÒ»¸öÄ¿Â¼");
+        QMessageBox *mb = new QMessageBox(QMessageBox::Critical,"ä¸¥é‡é”™è¯¯","é€‰æ‹©çš„ä½ç½®ä¸æ˜¯ä¸€ä¸ªç›®å½•");
         mb->show();
         exit();
     }

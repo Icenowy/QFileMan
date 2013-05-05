@@ -4,6 +4,7 @@
 #include "strlist.h"
 #include <QMessageBox>
 #include "searchwin.h"
+#include "oslib.h"
 
 using namespace std;
 
@@ -73,9 +74,10 @@ void MainWindow::on_pushButton_clicked()
     QString now = fi.canonicalFilePath();
     int last = now.lastIndexOf('/');
     now.remove(last,now.length()-last);
+    if(now == "") now = "/";
     ui->listView->setRootIndex(dirmodel->index(now));
     fi = dirmodel->fileInfo(ui->listView->rootIndex());
-    ui->plainTextEdit->document()->setPlainText("/" + fi.canonicalFilePath().remove(rootdir));
+    ui->plainTextEdit->document()->setPlainText(pathConv_o2a(rootdir,fi.canonicalFilePath()));
 }
 
 void MainWindow::on_treeView_clicked(const QModelIndex &index)
@@ -84,7 +86,7 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
     if(fi.isDir())
     {
         ui->listView->setRootIndex(dirmodel->index(fi.canonicalFilePath()));
-        ui->plainTextEdit->document()->setPlainText("/" + fi.canonicalFilePath().remove(rootdir));
+        ui->plainTextEdit->document()->setPlainText(pathConv_o2a(rootdir,fi.canonicalFilePath()));
     }
 }
 
@@ -92,6 +94,7 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 {
 }
+
 
 void MainWindow::on_listView_clicked(const QModelIndex &index)
 {
@@ -122,22 +125,12 @@ void MainWindow::on_listView_activated(const QModelIndex &index)
     if(fi.isDir())
     {
         ui->listView->setRootIndex(index);
-        ui->plainTextEdit->document()->setPlainText("/" + fi.canonicalFilePath().remove(rootdir));
+        ui->plainTextEdit->document()->setPlainText(pathConv_o2a(rootdir,fi.canonicalFilePath()));
     }
     else
     {
-#ifdef WIN32
-        {
-        QString str = fi.canonicalFilePath();
-        wchar_t *wc = new wchar_t[str.length()+1];
-        str.toWCharArray(wc);
-        for(int i = 0;i<str.length()+1;i++)
-        {
-            wc[i] = ((wc[i] != '/') ? wc[i] : '\\');
-        }
-        ShellExecute(NULL,L"open",wc,NULL,NULL,SW_SHOWNORMAL);
-        }
-#endif
+        osExecute(fi.canonicalFilePath());
+
     }
 }
 

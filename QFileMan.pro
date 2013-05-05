@@ -14,13 +14,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     preview.cpp \
     search.cpp \
-    searcherthread.cpp
+    searcherthread.cpp \
+    oslib.cpp
 
 HEADERS  += mainwindow.h \
     strlist.h \
     preview.h \
     searcherthread.h \
-    searchwin.h
+    searchwin.h \
+    oslib.h
 
 FORMS    += \
     mainwindow.ui \
@@ -34,4 +36,3 @@ OTHER_FILES += \
 RESOURCES += \
     main.qrc
 
-unix|win32: LIBS += -lwv -lglib-2.0
