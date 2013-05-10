@@ -21,12 +21,14 @@ public:
 private:
     QString loc;
     QString cont;
+    bool findCont;
 public:
     QString location();
     void setLocation(QString l);
     QString content();
     void setContent(QString c);
-
+    bool findContent();
+    void setFindContent(bool b);
 private:
     void RescFind(QDir *dir);
 

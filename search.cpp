@@ -27,6 +27,7 @@ void Search::on_pushButton_clicked()
 void Search::on_pushButton_released()
 {
     thread->setLocation(ui->lineEdit_2->text());
+    thread->setContent(ui->lineEdit->text());
     if(thread->isRunning())
     {
         thread->exit();
@@ -49,7 +50,8 @@ void Search::AddFileItem(QFileInfo file)
 #ifndef NDEBUG
 void Search::AddStringItem(QString str)
 {
-    ui->listWidget->addItem(str);
+    if(str != "")
+        ui->listWidget->addItem(str);
     ui->dial->setValue((ui->dial->value() + 1 ) % 10);
 }
 #else

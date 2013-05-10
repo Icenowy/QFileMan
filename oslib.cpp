@@ -28,3 +28,8 @@ QString pathConv_o2a(QString rootdir,QString str)
 {
     return ("/" + str.remove(0,rootdir.length()));
 }
+
+QString pathConv_a2o(QString rootdir,QString str)
+{
+    return (rootdir + str);
+}

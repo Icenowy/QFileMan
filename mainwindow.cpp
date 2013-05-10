@@ -19,6 +19,7 @@ MainWindow::MainWindow(QString rootdir, QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     rootdir = (new QFileInfo(rootdir))->canonicalFilePath();
+    if(rootdir[rootdir.length()-1] != '/') rootdir += "/";
     this->rootdir = rootdir;
     ui->setupUi(this);
     dirmodel = new QDirModel(ui->listView);
@@ -72,9 +73,12 @@ void MainWindow::on_pushButton_clicked()
 {
     QFileInfo fi = dirmodel->fileInfo(ui->listView->rootIndex());
     QString now = fi.canonicalFilePath();
+    now = pathConv_o2a(rootdir,now);
     int last = now.lastIndexOf('/');
     now.remove(last,now.length()-last);
     if(now == "") now = "/";
+    //if(now.length() < rootdir.length()) now = rootdir;
+    now = pathConv_a2o(rootdir,now);
     ui->listView->setRootIndex(dirmodel->index(now));
     fi = dirmodel->fileInfo(ui->listView->rootIndex());
     ui->plainTextEdit->document()->setPlainText(pathConv_o2a(rootdir,fi.canonicalFilePath()));

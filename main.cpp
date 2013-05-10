@@ -1,7 +1,10 @@
 #include <QtGui/QApplication>
 #include "mainwindow.h"
-
 #include <QFileInfo>
+
+#if defined Q_OS_LINUX
+#include <stdlib.h> //for getenv()
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +15,11 @@ int main(int argc, char *argv[])
 #if defined Q_OS_WIN32
         w = new MainWindow("C:");
 #elif defined Q_OS_LINUX
-        w = new MainWindow("/");
+        {
+            QString root = QString((getenv("HOME") == NULL) ? "" : getenv("HOME"));
+//            if(root[root.length()-1] != '/') root += "/";
+            w = new MainWindow(root);
+        }
 #endif
     }
     else

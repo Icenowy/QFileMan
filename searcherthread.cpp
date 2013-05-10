@@ -31,7 +31,7 @@ void SearcherThread::run()
     QString str = root.canonicalFilePath();
     QDir *dir = new QDir(str);
     this->RescFind(dir);
-    search->Done();
+    //search->Done();
 }
 
 QString SearcherThread::location()
@@ -63,29 +63,25 @@ void SearcherThread::RescFind(QDir *dir)
     QFileInfo fi;
     foreach(fi,fis)
     {
-#ifndef NDEBUG
-        {
-            QString debuginfo = (QString() + "Debug: Finding " + fi.canonicalFilePath() + " ");
-            AddStringItem(debuginfo);
-#ifdef Q_OS_WIN32
-            {
-                wchar_t *wc;
-                wc = new wchar_t[debuginfo.length()+1];
-                debuginfo.toWCharArray(wc);
-                OutputDebugStringW(wc);
-            }
-#endif
-        }
-#else
         AddStringItem("");
-#endif
-        if(reg->indexIn(fi.fileName()))
+        //if(reg->indexIn(fi.fileName()) != -1)
+        if(fi.fileName().indexOf(*reg) != -1)
         {
-            AddFileItem(fi);
+            AddStringItem(fi.canonicalFilePath());
         }
         if(fi.isDir())
         {
             RescFind(new QDir(fi.canonicalFilePath()));
         }
     }
+}
+
+bool SearcherThread::findContent()
+{
+    return findCont;
+}
+
+void SearcherThread::setFindContent(bool b)
+{
+    findCont = b;
 }
